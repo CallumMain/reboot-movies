@@ -202,13 +202,6 @@ def main(argv):
 		movies_df = pd.read_pickle('movie-data.pkl')
 		movies_df = movies_df[movies_df['budget'] > 0]
 
-		#cols = ['genreoriginal', 'genreremake', 'ratingoriginal', 'ratingremake', 
-		#		'releasedate', 'releasedateoriginal', 'title', 'originaltitle']
-
-		#movies_df.drop(cols, axis=1, inplace=True)
-		
-		#y, X = dmatrices('domestictotalgross ~ domestictotalgrossoriginal + time_diff + samerating +'\
-		#	'comedy + action + adventure + horror + romance + music + fantasy + drama + thriller + scifi', data=movies_df, return_type='dataframe')
 		
 		y, X = dmatrices('domestictotalgross ~ budget + adventure + fantasy', data=movies_df, return_type='dataframe')
 
