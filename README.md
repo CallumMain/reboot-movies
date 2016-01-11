@@ -4,8 +4,10 @@ Analysis of movies and their remakes or reboots using data scraped from boxoffic
 ## roboot_movies.py
 This script takes in a csv file with the format:
 
-```Remake,id_remake,Original,id_original
-   About Last Night (2014),aboutlastnight14,About Last Night,aboutlastnight```
+```
+Remake,id_remake,Original,id_original
+About Last Night (2014),aboutlastnight14,About Last Night,aboutlastnight
+```
 
 Where the id is the id used in the url by boxofficemojo to identify the film.  It should be noted that because we are looking at pairs of movies (i.e. a movie and its remake/reboot), pairs of movies are required with the first movie listed being the remake and the second being the original.
 
