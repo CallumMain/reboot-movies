@@ -9,29 +9,29 @@ from patsy import dmatrix
 import statsmodels.api as sm
 
 def get_movie_value(soup, field_name):
-    '''Grab a value from boxofficemojo HTML
-    
-    Takes a string attribute of a movie on the page and
-    returns the string in the next sibling object
-    (the value for that attribute)
-    or None if nothing is found.
-    '''
-    obj = soup.find(text=re.compile(field_name))
-    if not obj:
-        return None
-    # this works for most of the values
-    next_sibling = obj.findNextSibling()
-    if next_sibling:
-        return next_sibling.text 
-    else:
-        return None
+	'''Grab a value from boxofficemojo HTML
+	
+	Takes a string attribute of a movie on the page and
+	returns the string in the next sibling object
+	(the value for that attribute)
+	or None if nothing is found.
+	'''
+	obj = soup.find(text=re.compile(field_name))
+	if not obj:
+		return None
+	# this works for most of the values
+	next_sibling = obj.findNextSibling()
+	if next_sibling:
+		return next_sibling.text 
+	else:
+		return None
 
 def to_date(datestring):
 	'''Parses date string into a datetime object
-
 	'''
-    date = dateutil.parser.parse(datestring)
-    return date
+
+	date = dateutil.parser.parse(datestring)
+	return date
 
 def money_to_int(moneystring):
 	'''converts money string into an integer value
@@ -40,8 +40,8 @@ def money_to_int(moneystring):
 	and removes the $ sign and commas, converts the string to an int
 	and returns the int
 	'''
-    moneystring = moneystring.replace('$', '').replace(',', '')
-    return int(moneystring)
+	moneystring = moneystring.replace('$', '').replace(',', '')
+	return int(moneystring)
 
 def runtime_to_minutes(runtimestring):
 	'''converts our runtimestring into an integer
@@ -50,12 +50,12 @@ def runtime_to_minutes(runtimestring):
 	splits the string and finally tries to convert it to an integer
 	which represents total minutes and returns None if it can't.
 	'''
-    runtime = runtimestring.split()
-    try:
-        minutes = int(runtime[0])*60 + int(runtime[2])
-        return minutes
-    except:
-        return None
+	runtime = runtimestring.split()
+	try:
+		minutes = int(runtime[0])*60 + int(runtime[2])
+		return minutes
+	except:
+		return None
 
 def get_budget(soup):
 	'''gets the budget of a movie and returns it as an integer
@@ -78,20 +78,20 @@ def get_movie_information(soup):
 	Takes a soup object and then finds the title, release date,
 	domestic total gross, genre, and rating and returns them all
 	'''
-    title_string = soup.find('title').text
-    title = title_string.split('(')[0]
-    
-    raw_release_date = get_movie_value(soup,'Release Date')
-    release_date = to_date(raw_release_date)
-    
-    raw_domestic_total_gross = get_movie_value(soup,'Domestic Total')
-    domestic_total_gross = money_to_int(raw_domestic_total_gross)
+	title_string = soup.find('title').text
+	title = title_string.split('(')[0]
+	
+	raw_release_date = get_movie_value(soup,'Release Date')
+	release_date = to_date(raw_release_date)
+	
+	raw_domestic_total_gross = get_movie_value(soup,'Domestic Total')
+	domestic_total_gross = money_to_int(raw_domestic_total_gross)
 
-    genre = get_movie_value(soup,'Genre:')
+	genre = get_movie_value(soup,'Genre:')
 
-    rating = get_movie_value(soup,'Rating')
-    
-    return title, release_date, domestic_total_gross, genre, rating
+	rating = get_movie_value(soup,'Rating')
+	
+	return title, release_date, domestic_total_gross, genre, rating
 
 def scrape_data(movies):
 	'''Scrapes all of the data for the given movies and returns a DataFrame
@@ -106,7 +106,7 @@ def scrape_data(movies):
 	originals = movies['id_original'].tolist()
 
 	headers = ['title', 'originaltitle','domestictotalgross', 'domestictotalgrossoriginal',
-           'releasedate', 'releasedateoriginal', 'ratingremake', 'ratingoriginal', 'genreremake', 'genreoriginal', 'budget']
+		   'releasedate', 'releasedateoriginal', 'ratingremake', 'ratingoriginal', 'genreremake', 'genreoriginal', 'budget']
 	movie_data = []
 
 	for r, o in zip(remakes, originals):
@@ -127,8 +127,8 @@ def scrape_data(movies):
 		title_original, release_date_original, domestic_gross_original, genre_original, rating_original = get_movie_information(soup_original)
 		title_remake, release_date_remake, domestic_gross_remake, genre_remake, rating_remake = get_movie_information(soup_remake)
 		movie_dict = dict(zip(headers, [title_remake, title_original, domestic_gross_remake, domestic_gross_original,
-        								release_date_remake, release_date_original, rating_remake,
-                                		rating_original, genre_remake, genre_original, budget]))
+										release_date_remake, release_date_original, rating_remake,
+										rating_original, genre_remake, genre_original, budget]))
 		movie_data.append(movie_dict)
 
 	return pd.DataFrame(movie_data)
